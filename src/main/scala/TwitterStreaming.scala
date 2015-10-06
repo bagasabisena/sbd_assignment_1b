@@ -2,7 +2,6 @@ import java.io.{InputStream, File}
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
-import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.twitter.TwitterUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
@@ -19,7 +18,6 @@ object TwitterStreaming {
     val sparkUrl = "local[*]"
 
     // Configure Twitter credentials using twitter.txt
-    //TutorialHelper.configureTwitterCredentials()
     setTwitterKey()
 
     // set log to error to reduce verbosity
@@ -65,13 +63,6 @@ object TwitterStreaming {
     // sort the dstream by value descending to get the top retweet. Print only the top 5
     // the map is flipped so the count is for the key
     maxRetweet.map(x => (x._2, x._1.getText)).transform(_.sortBy(_._1, false)).print(5)
-
-    // questions
-    // tip c, how to count the retweet, follow the guide from ampcamp
-    // is the method to capture the original tweet from retweet is correct?
-    // how to print top 5 retweets only, take(5) is not available for dstream
-
-    //top_retweet.print()
 
     ssc.start()
     ssc.awaitTermination()
